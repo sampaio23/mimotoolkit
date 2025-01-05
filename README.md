@@ -9,6 +9,14 @@ The MIMO Toolkit (MTK) compiles a variety of tools and algorithms for MIMO simul
 
 The initial goal is to compare the performance of comparator network for MIMO receivers using 1-bit ADCs. You can find relevant literature in [[1]](#1), [[2]](#2). If this toolkit is helpful, we kindly ask you to cite our work.
 
+> A. B. L. B. Fernandes, Z. Shao, L. T. N. Landau and R. C. de Lamare (2023).
+> Multiuser-MIMO Systems Using Comparator Network-Aided Receivers With 1-Bit Quantization.
+> IEEE Transactions on Communications, vol. 71, no. 2, pp. 908-922, Feb. 2023.
+
+> L. C. S. Ramos and L. T. N. Landau (2024).
+> Improved Analysis of Comparator Network Aided Channel Estimation for MIMO Receivers with 1-Bit ADCs.
+> 2024 19th International Symposium on Wireless Communication Systems (ISWCS), Rio de Janeiro, Brazil, 2024.
+
 ## Usage
 
 Just clone the repository and add the *mtk* folder to the MATLAB path.
@@ -53,9 +61,9 @@ Multiuser-MIMO Systems Using Comparator Network-Aided Receivers With 1-Bit Quant
 IEEE Transactions on Communications, vol. 71, no. 2, pp. 908-922, Feb. 2023.
 
 <a id="2">[2]</a>
-L. C. S. Ramos and L. T. N. Landau (2024)
+L. C. S. Ramos and L. T. N. Landau (2024).
 Improved Analysis of Comparator Network Aided Channel Estimation for MIMO Receivers with 1-Bit ADCs.
-2024 19th International Symposium on Wireless Communication Systems (ISWCS), Rio de Janeiro, Brazil, 2024
+2024 19th International Symposium on Wireless Communication Systems (ISWCS), Rio de Janeiro, Brazil, 2024.
 
 <a id="3">[3]</a>
 Y. Li, C. Tao, G. Seco-Granados, A. Mezghani, A. L. Swindlehurst and L. Liu (2017).
