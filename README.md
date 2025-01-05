@@ -17,7 +17,7 @@ Just clone the repository and add the *mtk* folder to the MATLAB path.
 
 In the *examples* folder, the *blmmse.m* reproduces the BLMMSE channel estimator in [[3, Fig. 2]](#3).
 
-First, the library generates `iterations` Rayleigh channel realizations of a `K`$\times$`M` MIMO system with 1-bit ADCs. Then, the library generates a pilot matrix with length `tau` using submatrices of the DFT operator and noise.
+First, the library generates `iterations` Rayleigh channel realizations of a `K` x `M` MIMO system with 1-bit ADCs. Then, the library generates a pilot matrix with length `tau` using submatrices of the DFT operator and noise.
 
 ```
 H = mtk_generate_channel('rayleigh', params);
@@ -42,8 +42,8 @@ H_hat = mtk_estimate_channel('blmmse', params);
 
 ## TODO
 
-[ ] Achievable rate
-[ ] Detection
+- [ ] Achievable rate
+- [ ] Detection
 
 ## References
 
