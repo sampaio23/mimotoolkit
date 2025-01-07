@@ -63,6 +63,7 @@ H_hat = mtk_estimate_channel('blmmse', params);
 
 ## TODO
 
+- [ ] Analytical results
 - [ ] Achievable rate
 - [ ] Detection
 
