@@ -11,25 +11,16 @@ function H_hat = mtk_estimate_channel(method, params)
 
             H_hat = (1/sqrt(rho))*(R*conj(Phi))/(conj(Phi')*conj(Phi));
         case 'blmmse'
-            H = params.H;
-            Phi = params.Phi;
-            N = params.N;
-            rho = params.rho;
             C_h_real = params.C_h_real;
+            H = params.H;
+            K = params.K;
+            M = params.M;
+            N = params.N;
+            Phi = params.Phi;
+            rho = params.rho;
 
-            M = length(H(:,1));
-            K = length(H(1,:));
-            tau = length(Phi(:,1));
-
-            Phi_line = kron(Phi, sqrt(rho)*eye(M));
-            Phi_line_real = [ real(Phi_line) -imag(Phi_line); imag(Phi_line) real(Phi_line)];
-            A_real = sqrt(2/pi) * sqrt(2/(K*rho + 1)) * eye(2*M*tau);
-            Phi_tilde_real = A_real * Phi_line_real;
-
-            C_y_r = Phi_line_real * C_h_real * Phi_line_real' + 1/2 * eye(2*M*tau);
-            Sigma_y_real = diag(diag(C_y_r));
-            invsqr_Sigma_y_real = sqrt(inv(Sigma_y_real));
-            C_r_real = real(2/pi * asin(invsqr_Sigma_y_real * real(C_y_r) * invsqr_Sigma_y_real));
+            Phi_tilde_real = params.Phi_tilde_real;
+            C_r_real = params.C_r_real;
 
             Y = sqrt(rho)*H*conj(Phi') + N;
             
@@ -43,26 +34,16 @@ function H_hat = mtk_estimate_channel(method, params)
 
             H_hat = reshape(h_hat, [M, K]);
         case 'additive-quantizer-noise'
-            H = params.H;
-            Phi = params.Phi;
-            N = params.N;
-            rho = params.rho;
             C_h_real = params.C_h_real;
+            H = params.H;
+            K = params.K;
+            M = params.M;
+            N = params.N;
+            Phi = params.Phi;
+            rho = params.rho;
 
-            M = length(H(:,1));
-            K = length(H(1,:));
-            tau = length(Phi(:,1));
-
-            Phi_line = kron(Phi, sqrt(rho)*eye(M));
-            Phi_line_real = [ real(Phi_line) -imag(Phi_line); imag(Phi_line) real(Phi_line)];
-            A_real = sqrt(2/pi) * sqrt(2/(K*rho + 1)) * eye(2*M*tau);
-            Phi_tilde_real = A_real * Phi_line_real;
-
-            C_y_r = Phi_line_real * C_h_real * Phi_line_real' + 1/2 * eye(2*M*tau);
-            % Sigma_y_real = diag(diag(C_y_r));
-            % invsqr_Sigma_y_real = sqrt(inv(Sigma_y_real));
-            % C_r_real = real(2/pi * asin(invsqr_Sigma_y_real * real(C_y_r) * invsqr_Sigma_y_real));
-            C_r_real = (1-2/pi)*eye(2*tau*M) + A_real*C_y_r*A_real';
+            Phi_tilde_real = params.Phi_tilde_real;
+            C_r_real = params.C_r_real;
 
             Y = sqrt(rho)*H*conj(Phi') + N;
             
