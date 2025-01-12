@@ -4,13 +4,19 @@ function G = mtk_detector(detector, params)
         case 'zf'        
             G = pinv(H_hat);
         case {'mf', 'mrc'}
-            G = H_hat';
+            G = inv(diag(diag(H_hat' * H_hat))) * H_hat';
         case 'mmse'
             G = (1/params.rho*eye(params.K) + H_hat'*H_hat)\H_hat';
+        case 'bmrc'
+            S_r = (H_hat * H_hat') + 1/params.rho*eye(params.M);
+            S_y = sqrt(inv(diag(diag(S_r))));
+            A = sqrt(2/pi) * S_y * H_hat;
+            G = inv(diag(diag(A' * A))) * A';
         case 'blmmse'
-            C_z = params.rho * H_hat * H_hat' + eye(params.M);
-            S_y = sqrt(inv(diag(diag(C_z))));
-            G = sqrt(pi/2)*sqrt(params.rho)*H_hat'*S_y/(asin(S_y * real(C_z) * S_y) + 1i*asin(S_y * imag(C_z) * S_y));
+            S_r = (H_hat * H_hat') + 1/params.rho*eye(params.M);
+            S_y = sqrt(inv(diag(diag(S_r))));
+            A = sqrt(2/pi) * S_y * H_hat;
+            G = A'/(A*A' + 2/pi*(asin(S_y * S_r * S_y) - S_y * S_r * S_y + 1/params.rho * inv(diag(diag(S_r)))));
         otherwise
             error('Detector not implemented');
     end
