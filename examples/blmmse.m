@@ -36,9 +36,9 @@ for SNR = SNRs
         params_blmmse.H = H(:,:,channel_index);
         params_ls.H = H(:,:,channel_index);
         params_adn.H = H(:,:,channel_index);
-        params_blmmse.N = N(:,:,1);
-        params_ls.N = N(:,:,1);
-        params_adn.N = N(:,:,1);
+        params_blmmse.N = N(:,:,channel_index);
+        params_ls.N = N(:,:,channel_index);
+        params_adn.N = N(:,:,channel_index);
 
         H_hat = mtk_estimate_channel('blmmse', params_blmmse);
         E = H(:,:,channel_index) - H_hat;
