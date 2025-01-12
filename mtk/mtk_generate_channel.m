@@ -5,7 +5,8 @@ function H = mtk_generate_channel(model, params)
             M = params.M;
             iterations = params.iterations;
 
-            current_seed = rng(2003*iterations);
+            current_seed = rng;
+            rng("shuffle");
             H = 1/sqrt(2)*(randn(M, K, iterations) + 1i*randn(M, K, iterations));
             rng(current_seed);
         otherwise
