@@ -1,0 +1,73 @@
+tic;
+channel_iterations = 100;
+symbol_iterations = 100;
+noise_iterations = 100;
+K = 2;
+M = 16;
+tau = 1;
+
+SNRs = linspace(-5, 30, 8);
+
+params.K = K;
+params.M = M;
+params.iterations = channel_iterations;
+params.symbol_iterations = symbol_iterations;
+params.noise_iterations = noise_iterations;
+params.tau = tau;
+
+H = mtk_generate_channel('rayleigh', params);
+x = mtk_generate_symbols('qpsk', params);
+n = mtk_generate_noise(params);
+
+error_mmse = zeros(size(SNRs));
+error_blmmse = zeros(size(SNRs));
+snr_index = 1;
+for SNR = SNRs
+    current_error_mmse = 0;
+    current_error_blmmse = 0;
+
+    params.rho = mtk_util_db_to_linear(SNR);
+    for channel_index=1:channel_iterations
+        params.H = H(:,:,channel_index);
+        params.H_hat = params.H; % Perfect CSI
+
+        G_mmse = mtk_detector('mmse', params);
+        G_blmmse = mtk_detector('blmmse', params);
+        for symbol_index=1:symbol_iterations
+            params.x = x(:, symbol_index);
+            for noise_index=1:noise_iterations
+                params.n = n(:,:,noise_index);
+    
+                r = sqrt(params.rho) * params.H * params.x + params.n;
+
+                y = mtk_util_quantize(r, 1);
+                x_tilde = G_blmmse * y;
+                x_hat = mtk_util_demodulate('qpsk', x_tilde);
+                current_error_blmmse = current_error_blmmse + sum(x_hat ~= params.x);
+
+                y = mtk_util_quantize(r, 1);
+                x_tilde = G_mmse * y;
+                x_hat = mtk_util_demodulate('qpsk', x_tilde);
+                current_error_mmse = current_error_mmse + sum(x_hat ~= params.x);
+            end
+        end
+    end
+    error_mmse(snr_index) = current_error_mmse / (params.K * channel_iterations * symbol_iterations * noise_iterations);
+    error_blmmse(snr_index) = current_error_blmmse / (params.K * channel_iterations * symbol_iterations * noise_iterations);
+    snr_index = snr_index + 1;
+end
+toc;
+
+semilogy(SNRs, error_mmse, '--o');
+hold on
+semilogy(SNRs, error_blmmse, '-->');
+hold off
+
+legend("MMSE", "BLMMSE");
+xlim([min(SNRs) max(SNRs)]);
+
+%%
+scatter(real(x(1,:)), imag(x(1,:)));
+hold on;
+scatter(real(x(2,:)), imag(x(2,:)));
+hold off;
