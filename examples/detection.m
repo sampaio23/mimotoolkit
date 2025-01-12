@@ -1,7 +1,7 @@
 tic;
-channel_iterations = 50;
-symbol_iterations = 50;
-noise_iterations = 50;
+channel_iterations = 100;
+symbol_iterations = 100;
+noise_iterations = 100;
 K = 2;
 M = 2;
 tau = 1;
@@ -19,14 +19,14 @@ H = mtk_generate_channel('rayleigh', params);
 x = mtk_generate_symbols('qpsk', params);
 n = mtk_generate_noise(params);
 
+params.x = x;
+
 error_zf = zeros(size(SNRs));
-error_zf_q = zeros(size(SNRs));
 error_mrc = zeros(size(SNRs));
 error_mmse = zeros(size(SNRs));
 snr_index = 1;
 for SNR = SNRs
     current_error_zf = 0;
-    current_error_zf_q = 0;
     current_error_mrc = 0;
     current_error_mmse = 0;
 
@@ -37,44 +37,32 @@ for SNR = SNRs
         G_zf = mtk_detector('zf', params);
         G_mrc = mtk_detector('mrc', params);
         G_mmse = mtk_detector('mmse', params);
-        for symbol_index=1:symbol_iterations
-            params.x = x(:, symbol_index);
-            for noise_index=1:noise_iterations
-                params.n = n(:,:,noise_index);
-    
-                r = sqrt(params.rho) * params.H * params.x + params.n;
+        for noise_index=1:noise_iterations
+            params.n = repmat(n(:,:,noise_index), 1, params.symbol_iterations);
 
-                y = r;
-                x_tilde = G_zf * y;
-                x_hat = mtk_util_demodulate('qpsk', x_tilde);
-                current_error_zf = current_error_zf + sum(x_hat ~= params.x);
+            r = sqrt(params.rho) * params.H * params.x + params.n;
+            y = r;
 
-                y = mtk_util_quantize(r, 1);
-                x_tilde = G_zf * y;
-                x_hat = mtk_util_demodulate('qpsk', x_tilde);
-                current_error_zf_q = current_error_zf_q + sum(x_hat ~= params.x);
+            x_tilde = G_zf * y;
+            x_hat = mtk_util_demodulate('qpsk', x_tilde);
+            current_error_zf = current_error_zf + sum(x_hat ~= params.x, 'all');
 
-                y = r;
-                x_tilde = G_mrc * y;
-                x_hat = mtk_util_demodulate('qpsk', x_tilde);
-                current_error_mrc = current_error_mrc + sum(x_hat ~= params.x);
+            x_tilde = G_mrc * y;
+            x_hat = mtk_util_demodulate('qpsk', x_tilde);
+            current_error_mrc = current_error_mrc + sum(x_hat ~= params.x, 'all');
 
-                y = r;
-                x_tilde = G_mmse * y;
-                x_hat = mtk_util_demodulate('qpsk', x_tilde);
-                current_error_mmse = current_error_mmse + sum(x_hat ~= params.x);
-            end
+            x_tilde = G_mmse * y;
+            x_hat = mtk_util_demodulate('qpsk', x_tilde);
+            current_error_mmse = current_error_mmse + sum(x_hat ~= params.x, 'all');
         end
     end
     error_zf(snr_index) = current_error_zf / (params.K * channel_iterations * symbol_iterations * noise_iterations);
-    error_zf_q(snr_index) = current_error_zf_q / (params.K * channel_iterations * symbol_iterations * noise_iterations);
     error_mrc(snr_index) = current_error_mrc / (params.K * channel_iterations * symbol_iterations * noise_iterations);
     error_mmse(snr_index) = current_error_mmse / (params.K * channel_iterations * symbol_iterations * noise_iterations);
     snr_index = snr_index + 1;
 end
 toc;
 
-%%
 semilogy(SNRs, error_zf, '-->');
 hold on;
 semilogy(SNRs, error_mrc, '--o');
