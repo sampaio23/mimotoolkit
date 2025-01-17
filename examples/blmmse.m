@@ -10,10 +10,11 @@ params.K = K;
 params.M = M;
 params.tau = tau;
 params.iterations = iterations;
+params.noise_iterations = 10;
 
-H = mtk_generate_channel('rayleigh', params);
+H = mtk_generate_channel('rayleigh', params, 0);
 Phi = mtk_generate_pilot('dft', params);
-N = mtk_generate_noise(params);
+N = mtk_generate_noise(params, 1);
 
 params.C_h_real = 1/2*eye(2*M*K);
 params.Phi = Phi;
