@@ -31,7 +31,7 @@ for SNR = SNRs
     params.rho = mtk_util_db_to_linear(SNR);
     params_blmmse = mtk_prepare_channel_estimation('blmmse', params);
     params_ls = mtk_prepare_channel_estimation('ls', params);
-    params_adn = mtk_prepare_channel_estimation('additive-quantizer-noise', params);
+    params_adn = mtk_prepare_channel_estimation('aqnm', params);
 
     for channel_index=1:iterations
         params_blmmse.H = H(:,:,channel_index);
@@ -49,7 +49,7 @@ for SNR = SNRs
         E = H(:,:,channel_index) - H_hat;
         current_error_ls = current_error_ls + norm(E, 'fro')^2;
 
-        H_hat = mtk_estimate_channel('additive-quantizer-noise', params_adn);
+        H_hat = mtk_estimate_channel('aqnm', params_adn);
         E = H(:,:,channel_index) - H_hat;
         current_error_adn = current_error_adn + norm(E, 'fro')^2;
     end
@@ -60,7 +60,6 @@ for SNR = SNRs
 end
 toc;
 
-%%
 plot(SNRs, 10*log10(nmse_ls), '-->', 'Color', '#da7e26', 'LineWidth', 1, 'MarkerSize', 8);
 hold on;
 plot(SNRs, 10*log10(nmse_blmsse), 'r-s', 'Color', '#eb1f24', 'LineWidth', 1, 'MarkerSize', 8);

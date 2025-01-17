@@ -10,7 +10,7 @@ function H_hat = mtk_estimate_channel(method, params)
             R = mtk_util_quantize(Y, 1/sqrt(2));
 
             H_hat = (1/sqrt(rho))*(R*conj(Phi))/(conj(Phi')*conj(Phi));
-        case {'blmmse','additive-quantizer-noise'}
+        case {'blmmse','aqnm'}
             C_h_real = params.C_h_real;
             H = params.H;
             K = params.K;

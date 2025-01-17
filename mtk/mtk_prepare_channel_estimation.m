@@ -18,7 +18,7 @@ function params = mtk_prepare_channel_estimation(method, params)
             Sigma_y_real = diag(diag(C_y_r));
             invsqr_Sigma_y_real = sqrt(inv(Sigma_y_real));
             params.C_r_real = real(2/pi * asin(invsqr_Sigma_y_real * real(C_y_r) * invsqr_Sigma_y_real));
-        case 'additive-quantizer-noise'
+        case 'aqnm'
             C_h_real = params.C_h_real;
             K = params.K;
             M = params.M;
