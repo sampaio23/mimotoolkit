@@ -1,5 +1,7 @@
 function H_hat = mtk_estimate_channel(method, params)
     switch method
+        case 'perfect'
+            H_hat = params.H;
         case 'ls'
             H = params.H;
             Phi = params.Phi;
