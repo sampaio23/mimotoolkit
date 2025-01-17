@@ -9,7 +9,7 @@ function H_hat = mtk_estimate_channel(method, params)
             rho = params.rho;
 
             Y = sqrt(rho)*H*conj(Phi') + N;
-            R = mtk_util_quantize(Y, 1/sqrt(2));
+            R = mtk_util_quantize('1bit', Y, 1/sqrt(2));
 
             H_hat = (1/sqrt(rho))*(R*conj(Phi))/(conj(Phi')*conj(Phi));
         case {'blmmse','aqnm'}
@@ -29,7 +29,7 @@ function H_hat = mtk_estimate_channel(method, params)
             y = Y(:);
             y_real = [real(y); imag(y)];
 
-            r = mtk_util_quantize(y_real, 1);
+            r = mtk_util_quantize('1bit', y_real, 1);
             
             h_hat_real = C_h_real * (Phi_tilde_real' / C_r_real) * r;
             h_hat = h_hat_real(1 : M*K) + 1i * h_hat_real(M*K+1 : 2*M*K);
@@ -53,7 +53,7 @@ function H_hat = mtk_estimate_channel(method, params)
             y = Y(:);
             y_real = [real(y); imag(y)];
 
-            r = mtk_util_quantize(Beff * y_real, 1);
+            r = mtk_util_quantize('1bit', Beff * y_real, 1);
 
             h_hat_real = C_h_real * (Phi_tilde_real' / C_r_real) * r;
             h_hat = h_hat_real(1 : M*K) + 1i * h_hat_real(M*K+1 : 2*M*K);
