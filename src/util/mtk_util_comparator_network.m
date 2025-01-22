@@ -1,4 +1,4 @@
-function [B, Beff] = mtk_util_comparator_network(type, params)
+function [B, Beff] = mtk_util_comparator_network(type, params, seed)
     alpha = params.alpha;    
     M = params.M;
     tau = params.tau;
@@ -26,7 +26,7 @@ function [B, Beff] = mtk_util_comparator_network(type, params)
             for row=1:n
                F(row,i) = 1;
                F(row,ii) = -1;
-               if (ii == 2*Nr)
+               if (ii == 2*M)
                     i = i+1;
                     start_j = start_j+1;
                     ii = start_j;
@@ -35,9 +35,8 @@ function [B, Beff] = mtk_util_comparator_network(type, params)
                end
             end
 
-            current_seed = rng(9997*iterations);
+            rng(seed);
             rows = randperm(n,alpha);
-            rng(current_seed);
 
             rows = sort(rows);
             for i=1:length(rows)
