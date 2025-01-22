@@ -3,7 +3,7 @@ clear all;
 params.K = 3;
 params.M = 16;
 params.tau = 3;
-params.channel_iterations = 10;
+params.channel_iterations = 1;
 params.noise_iterations = 11;
 params.channel_index = 11;
 params.SNR = -5;
