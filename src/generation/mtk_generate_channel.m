@@ -1,4 +1,4 @@
-function H = mtk_generate_channel(model, params, seed)
+function [H, results] = mtk_generate_channel(model, params, seed)
     K = params.K;
     M = params.M;
     channel_iterations = params.channel_iterations;
@@ -6,15 +6,18 @@ function H = mtk_generate_channel(model, params, seed)
         case 'rayleigh'
             rng(seed);
             H = 1/sqrt(2)*(randn(M, K, channel_iterations) + 1i*randn(M, K, channel_iterations));
+            results.C_h_real = 1/2*eye(2*M*K);
         case 'kron-markov'
             r_k = params.r_k;
             channel_index = params.channel_index;
             H = zeros(M, K, channel_index, channel_iterations);
             eta = params.eta;
 
-            etaM = kron(diag(eta), eye(M));
+            etaM = kron(diag(eta), eye(params.M));
+            results.eta_real = [real(etaM) -imag(etaM); imag(etaM) real(etaM)];
             zetas = sqrt(1-eta.^2);
-            zetaM = kron(diag(zetas), eye(M));
+            zetaM = kron(diag(zetas), eye(params.M));
+            results.zeta_real = [real(zetaM) -imag(zetaM); imag(zetaM) real(zetaM)];
 
             rng(seed);
             R = zeros(M*K);
@@ -29,6 +32,7 @@ function H = mtk_generate_channel(model, params, seed)
                 end
                 R(M*(k-1)+1:M*k, M*(k-1)+1:M*k) = Rk;
             end
+            results.C_h_real = 1/2 * [real(R) -imag(R); imag(R) real(R)];
 
             for it=1:channel_iterations
                 for k=1:K
