@@ -23,11 +23,22 @@ sim.params = params;
 tic;
 sim.method = 'kfb';
 [nmse, results] = mtk_sim_ce_index(sim);
+
+params.alpha = 32;
+[~, params.Beff] = mtk_util_comparator_network('random', params, 0);
+sim.method = 'kfb-cn';
+sim.params = params;
+[nmse_cn, results_cn] = mtk_sim_ce_index(sim);
 toc;
 
-plot(0:params.channel_index-1, 10*log10(nmse), '-o', 'Color', '#da7e26', 'LineWidth', 1, 'MarkerSize', 8);
+plot(0:params.channel_index-1, 10*log10(nmse), 'b-o', 'LineWidth', 1, 'MarkerSize', 8);
 hold on;
-plot(0:params.channel_index-1, 10*log10(results.mmse), '--', 'Color', '#da7e26', 'LineWidth', 1, 'MarkerSize', 8);
+plot(0:params.channel_index-1, 10*log10(results.mmse), 'b--', 'LineWidth', 1, 'MarkerSize', 8);
+
+plot(0:params.channel_index-1, 10*log10(nmse_cn), 'r-o', 'LineWidth', 1, 'MarkerSize', 8);
+hold on;
+plot(0:params.channel_index-1, 10*log10(results_cn.mmse), 'r--', 'LineWidth', 1, 'MarkerSize', 8);
+hold off;
 
 xlabel('Time Index')
 ylabel('NMSE [dB]')
