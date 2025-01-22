@@ -1,22 +1,23 @@
 clear all;
 
-params.K = 2;
-params.M = 2;
-params.tau = 2;
+params.K = 3;
+params.M = 16;
+params.tau = 3;
 params.channel_iterations = 10;
-params.noise_iterations = 30;
-params.channel_index = 30;
+params.noise_iterations = 11;
+params.channel_index = 11;
 params.SNR = -5;
-params.r_k = 0.8;
-params.eta = 0.998*ones(params.K, 1);
+params.r_k = 0.5;
+params.eta = mtk_util_jakes(3/3.6, 2.5e9, 5e-3)*ones(params.K, 1);
 
 tic;
-params.H = mtk_generate_channel('kron-markov', params, 0);
+[params.H, results] = mtk_generate_channel('kron-markov', params, 0);
 params.Phi = mtk_generate_pilot('dft', params);
 params.N = mtk_generate_noise(params, 1);
 
-% TODO: get from generation
-params.C_h_real = 1/2*eye(2 * params.M * params.K);
+params.C_h_real = results.C_h_real;
+params.eta_real = results.eta_real;
+params.zeta_real = results.zeta_real;
 
 sim.quantizer = '1bit';
 sim.params = params;
