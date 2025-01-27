@@ -22,6 +22,14 @@ function G = mtk_det_detector(detector, params)
             S_y = sqrt(inv(diag(diag(S_r))));
             A = sqrt(2/pi) * S_y * H_hat;
             G = A'/(2/pi*(asin(S_y * real(S_r) * S_y) + 1i*asin(S_y * imag(S_r) * S_y)));
+        case 'bmmse-cn'
+            B = params.B;
+
+            H_hat_real = mtk_util_mat_real(H_hat);
+            S_r_real = 1/2 * (B * (H_hat_real * H_hat_real') * B') + 1/2 * 1/params.rho * B*B';
+            S_y_real = sqrt(inv(diag(diag(S_r_real))));
+            A = sqrt(2/pi) * 1/2 * S_y_real * B * H_hat_real;
+            G = A'/(2/pi*(asin(S_y_real * real(S_r_real) * S_y_real)));
         otherwise
             error('Detector not implemented');
     end
