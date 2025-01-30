@@ -1,4 +1,4 @@
-function params = mtk_ce_prepare(method, params)
+function [params, results] = mtk_ce_prepare(method, params)
     switch method
         case 'ls'
         case 'blmmse'
@@ -18,6 +18,9 @@ function params = mtk_ce_prepare(method, params)
             Sigma_y_real = diag(diag(C_y_r));
             invsqr_Sigma_y_real = sqrt(inv(Sigma_y_real));
             params.C_r_real = real(2/pi * asin(invsqr_Sigma_y_real * real(C_y_r) * invsqr_Sigma_y_real));
+
+            results.error_real = C_h_real - C_h_real * (params.Phi_tilde_real' / params.C_r_real) * params.Phi_tilde_real * C_h_real;
+            results.nmse = 1/(M*K)*trace(results.error_real);
         case 'aqnm'
             C_h_real = params.C_h_real;
             K = params.K;

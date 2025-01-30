@@ -22,6 +22,11 @@ function G = mtk_det_detector(detector, params)
             S_y = sqrt(inv(diag(diag(S_r))));
             A = sqrt(2/pi) * S_y * H_hat;
             G = A'/(2/pi*(asin(S_y * real(S_r) * S_y) + 1i*asin(S_y * imag(S_r) * S_y)));
+        case 'robust-bmmse'
+            S_r = (H_hat * H_hat') + params.Gamma + 1/params.rho*eye(params.M);
+            S_y = sqrt(inv(diag(diag(S_r))));
+            A = sqrt(2/pi) * S_y * H_hat;
+            G = A'/(2/pi*(asin(S_y * real(S_r) * S_y) + 1i*asin(S_y * imag(S_r) * S_y)));
         case 'bmmse-cn'
             B = params.B;
 

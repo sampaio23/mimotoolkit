@@ -1,3 +1,4 @@
+% deprecated - value will be returned by ce_prepare
 function nmse = mtk_ce_estimate_analytical(method, params)
     switch method
         case {'blmmse', 'blmmse-cn'}
