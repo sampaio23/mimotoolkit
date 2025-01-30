@@ -42,6 +42,6 @@ hold off;
 
 xlabel('Time Index')
 ylabel('NMSE [dB]')
-xlim([0 10]);
+xlim([0 params.channel_index-1]);
 ylim([-7.5 -1.5]);
 grid();
