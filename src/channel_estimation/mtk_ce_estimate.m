@@ -12,6 +12,18 @@ function [H_hat, results] = mtk_ce_estimate(method, params)
             R = mtk_util_quantize(params.quantizer, Y, 1/sqrt(2));
 
             H_hat = (1/sqrt(rho))*(R*conj(Phi))/(conj(Phi')*conj(Phi));
+        case 'mmse'
+            C_H = params.C_H;
+            H = params.H;
+            Phi = params.Phi;
+            N = params.N;
+            rho = params.rho;
+            tau = params.tau;
+
+            Y = sqrt(rho)*H*conj(Phi') + N;
+            R = mtk_util_quantize(params.quantizer, Y, 1/sqrt(2));
+
+            H_hat = R/(rho*conj(Phi)*C_H*conj(Phi') + params.M*eye(tau))*sqrt(rho)*conj(Phi)*C_H;
         case {'blmmse','aqnm'}
             C_h_real = params.C_h_real;
             H = params.H;

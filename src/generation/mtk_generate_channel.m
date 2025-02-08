@@ -8,6 +8,7 @@ function [H, results] = mtk_generate_channel(model, params, seed)
             H = 1/sqrt(2)*(randn(M, K, channel_iterations) + 1i*randn(M, K, channel_iterations));
             results.C_h = eye(M*K);
             results.C_h_real = 1/2*eye(2*M*K);
+            results.C_H = params.M * eye(params.K);
         case 'kron-markov'
             r_k = params.r_k;
             channel_index = params.channel_index;

@@ -1,6 +1,7 @@
 function [params, results] = mtk_ce_prepare(method, params)
     switch method
-        case 'ls'
+        case {'ls', 'mmse'}
+            return
         case 'blmmse'
             C_h_real = params.C_h_real;
             K = params.K;
