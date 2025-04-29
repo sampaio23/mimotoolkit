@@ -24,7 +24,7 @@ function [H_hat, results] = mtk_ce_estimate(method, params)
             R = mtk_util_quantize(params.quantizer, Y, 1/sqrt(2));
 
             H_hat = R/(rho*conj(Phi)*C_H*conj(Phi') + params.M*eye(tau))*sqrt(rho)*conj(Phi)*C_H;
-        case {'blmmse','aqnm'}
+        case {'bmmse','aqn'}
             C_h_real = params.C_h_real;
             H = params.H;
             K = params.K;
@@ -44,11 +44,10 @@ function [H_hat, results] = mtk_ce_estimate(method, params)
             r = mtk_util_quantize(params.quantizer, y_real, 1);
             
             h_hat_real = C_h_real * (Phi_tilde_real' / C_r_real) * r;
-            % h_hat = h_hat_real(1 : M*K) + 1i * h_hat_real(M*K+1 : 2*M*K);
             h_hat = mtk_util_vec_complex(h_hat_real);
 
             H_hat = reshape(h_hat, [M, K]);
-        case 'blmmse-cn'
+        case 'bmmse-cn'
             Beff = params.Beff;
             C_h_real = params.C_h_real;
             H = params.H;

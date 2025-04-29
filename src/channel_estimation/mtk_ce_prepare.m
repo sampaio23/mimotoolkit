@@ -2,7 +2,7 @@ function [params, results] = mtk_ce_prepare(method, params)
     switch method
         case {'ls', 'mmse'}
             return
-        case 'blmmse'
+        case 'bmmse'
             C_h_real = params.C_h_real;
             K = params.K;
             M = params.M;
@@ -23,7 +23,7 @@ function [params, results] = mtk_ce_prepare(method, params)
 
             results.error_real = C_h_real - C_h_real * (params.Phi_tilde_real' / params.C_r_real) * params.Phi_tilde_real * C_h_real;
             results.nmse = 1/(M*K)*trace(results.error_real);
-        case 'aqnm'
+        case 'aqn'
             C_h_real = params.C_h_real;
             K = params.K;
             M = params.M;
@@ -38,9 +38,7 @@ function [params, results] = mtk_ce_prepare(method, params)
 
             C_y_r = Phi_line_real * C_h_real * Phi_line_real' + 1/2 * eye(2*M*tau);
             params.C_r_real = (1-2/pi)*eye(2*tau*M) + A_real*C_y_r*A_real';
-            params.C_r_real
-        case 'blmmse-cn'
-            alpha = params.alpha;
+        case 'bmmse-cn'
             Beff = params.Beff;
             C_h_real = params.C_h_real;
             K = params.K;
