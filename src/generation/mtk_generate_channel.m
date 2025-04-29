@@ -9,6 +9,31 @@ function [H, results] = mtk_generate_channel(model, params, seed)
             results.C_h = eye(M*K);
             results.C_h_real = 1/2*eye(2*M*K);
             results.C_H = params.M * eye(params.K);
+        case 'rician'
+            rng(seed);
+            H = zeros(M, K, channel_iterations);
+            K_factor = params.K_factor;
+            for it=1:channel_iterations
+                for k=1:K
+                    mu = sqrt(K_factor(k)/(2*(K_factor(k) + 1)));
+                    sigma = sqrt(1/(2*(K_factor(k) + 1)));
+                    gk = sigma*(randn(M, 1) + 1i*randn(M, 1)) + mu;
+                    H(:, k, it) = gk;
+                end
+            end
+            results.C_h_real = 1/2*eye(2*M*K);
+        case 'large-scale'
+            rng(seed);
+            H = 1/sqrt(2)*(randn(M, K, channel_iterations) + 1i*randn(M, K, channel_iterations));
+            for i=1:channel_iterations
+                H(:,:,i) = H(:,:,i)*sqrt(diag(params.beta));
+            end
+            c = zeros(M*K, 1);
+            for i=1:K
+                c((i-1)*M+1:i*M) = kron(params.beta(i), ones(M, 1));
+            end
+            C = diag(c);
+            results.C_h_real = 1/2 * mtk_util_mat_real(C);
         case 'kron-markov'
             r_k = params.r_k;
             channel_index = params.channel_index;

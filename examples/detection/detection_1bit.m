@@ -1,9 +1,9 @@
 tic;
-channel_iterations = 1000;
+channel_iterations = 10;
 symbol_iterations = 100;
 noise_iterations = 100;
 K = 2;
-M = 5;
+M = 2;
 tau = 1;
 
 SNRs = linspace(-5, 30, 8);

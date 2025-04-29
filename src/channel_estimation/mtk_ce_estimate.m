@@ -44,7 +44,8 @@ function [H_hat, results] = mtk_ce_estimate(method, params)
             r = mtk_util_quantize(params.quantizer, y_real, 1);
             
             h_hat_real = C_h_real * (Phi_tilde_real' / C_r_real) * r;
-            h_hat = h_hat_real(1 : M*K) + 1i * h_hat_real(M*K+1 : 2*M*K);
+            % h_hat = h_hat_real(1 : M*K) + 1i * h_hat_real(M*K+1 : 2*M*K);
+            h_hat = mtk_util_vec_complex(h_hat_real);
 
             H_hat = reshape(h_hat, [M, K]);
         case 'blmmse-cn'

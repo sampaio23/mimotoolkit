@@ -7,7 +7,7 @@ K = 2;
 M = 16;
 tau = 2;
 
-SNRs = linspace(-10, 30, 9);
+SNRs = linspace(-10, 30, 1);
 
 params.K = K;
 params.M = M;

@@ -1,7 +1,7 @@
 tic;
-channel_iterations = 1000;
-symbol_iterations = 100;
-noise_iterations = 100;
+channel_iterations = 10;
+symbol_iterations = 10;
+noise_iterations = 10;
 K = 2;
 M = 16;
 tau = 2;
